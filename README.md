@@ -8,7 +8,7 @@ Swipe-to-reveal UI component for Jetpack Compose.
 
 `SwipeBox` composable takes 3 required parameters such as `state`, `foreground`, and `background` (and `modifier` as needed).
 
-| Parameters  | Type | Description |
+| Parameter  | Type | Description |
 | ------------- | ------------- | ------------- |
 | state  | `SwipeBoxState` | It's for managing the state of the `SwipeBox` |
 | foreground  | `@Composable BoxScope.() -> Unit`  | A composable that's shown in foreground |
