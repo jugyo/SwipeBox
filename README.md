@@ -2,9 +2,7 @@
 
 Swipe-to-reveal UI component for Jetpack Compose.
 
-
-
-## Usage
+## Basic usage
 
 `SwipeBox` composable takes 3 required parameters such as `state`, `foreground`, and `background` (and `modifier` as needed).
 
@@ -55,3 +53,51 @@ fun Preview() {
     )
 }
 ```
+
+![SwipeBoxSample.gif](https://github.com/jugyo/SwipeBox/blob/main/screenshots/SwipeBoxSample.gif?raw=true)
+
+## Usage of GroupedSwipeBoxState
+
+To integrate `SwipeBox` to `LazyColumn`, this library provides `GroupedSwipeBoxState` so you can manager all the states of child `SwipeBox`s in one hand.
+
+```kotlin
+@Preview
+@Composable
+private fun Preview() {
+    val lazyListState = rememberLazyListState()
+    val groupedSwipeBoxState = rememberGroupedSwipeBoxState<Int>()
+
+    LaunchedEffect(lazyListState.isScrollInProgress) {
+        if (lazyListState.isScrollInProgress) {
+            groupedSwipeBoxState.closeAll()
+        }
+    }
+
+    LazyColumn(
+        state = lazyListState
+    ) {
+        items(12) { index ->
+            val swipeBoxState = groupedSwipeBoxState.stateFor(index)
+
+            Column {
+                SwipeBox(
+                    state = swipeBoxState,
+                    foreground = {
+                        ListItem(
+                            enabled = !swipeBoxState.isDragging && !swipeBoxState.isOpen,
+                        )
+                    },
+                    background = {
+                        ListItemActions(
+                            enabled = !swipeBoxState.isDragging && swipeBoxState.isOpen
+                        )
+                    }
+                )
+                Divider(color = Color(0xFFF4F4F4))
+            }
+        }
+    }
+}
+```
+
+![GroupedSwipeBoxSample.gif](https://github.com/jugyo/SwipeBox/blob/main/screenshots/GroupedSwipeBoxSample.gif?raw=true)
