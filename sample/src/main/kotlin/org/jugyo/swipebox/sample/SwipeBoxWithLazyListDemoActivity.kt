@@ -3,7 +3,6 @@ package org.jugyo.swipebox.sample
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -35,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jugyo.swipebox.SwipeBox
 import org.jugyo.swipebox.SwipeBoxState
-import org.jugyo.swipebox.rememberSwipeListState
+import org.jugyo.swipebox.rememberGroupedSwipeBoxState
 
 class SwipeBoxWithLazyListDemoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +51,7 @@ class SwipeBoxWithLazyListDemoActivity : AppCompatActivity() {
 @Composable
 private fun Screen() {
     val lazyListState = rememberLazyListState()
-    val swipeListState = rememberSwipeListState<Int>()
+    val swipeListState = rememberGroupedSwipeBoxState<Int>()
 
     LaunchedEffect(lazyListState.isScrollInProgress) {
         if (lazyListState.isScrollInProgress) {

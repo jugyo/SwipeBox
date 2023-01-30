@@ -6,7 +6,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 
 @Stable
-class SwipeListState<T> internal constructor(
+class GroupedSwipeBoxState<T> internal constructor(
     val animationDurationMillis: Int,
     val swipeThresholdRatio: Float
 ) {
@@ -69,13 +69,13 @@ private val DefaultAnimationDurationMillis = 200
 private val SwipeThresholdRatio = 0.25f
 
 @Composable
-fun <T> rememberSwipeListState(
+fun <T> rememberGroupedSwipeBoxState(
     animationDurationMillis: Int = DefaultAnimationDurationMillis,
     swipeThresholdRatio: Float = SwipeThresholdRatio
 
-): SwipeListState<T> {
+): GroupedSwipeBoxState<T> {
     val state = remember {
-        SwipeListState<T>(
+        GroupedSwipeBoxState<T>(
             animationDurationMillis = animationDurationMillis,
             swipeThresholdRatio = swipeThresholdRatio
         )
