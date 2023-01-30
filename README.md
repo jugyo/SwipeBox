@@ -54,7 +54,7 @@ fun Preview() {
 }
 ```
 
-![SwipeBoxSample.gif](https://github.com/jugyo/SwipeBox/blob/main/screenshots/SwipeBoxSample.gif?raw=true)
+<img src="https://github.com/jugyo/SwipeBox/blob/main/screenshots/SwipeBoxSample.gif?raw=true" width="460">
 
 ## Usage of GroupedSwipeBoxState
 
@@ -100,4 +100,4 @@ private fun Preview() {
 }
 ```
 
-![GroupedSwipeBoxSample.gif](https://github.com/jugyo/SwipeBox/blob/main/screenshots/GroupedSwipeBoxSample.gif?raw=true)
+<img src="https://github.com/jugyo/SwipeBox/blob/main/screenshots/GroupedSwipeBoxSample.gif?raw=true" width="460">
