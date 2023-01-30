@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.Animatable
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -61,13 +63,16 @@ private fun Screen() {
     Column(
         modifier = Modifier.background(Color.White)
     ) {
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp)
-            .padding(vertical = 16.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)
+                .padding(vertical = 16.dp)
+        ) {
             StatusText(
                 modifier = Modifier.align(Alignment.CenterEnd),
-                text = "isScrollInProgress: ${lazyListState.isScrollInProgress}")
+                text = "isScrollInProgress: ${lazyListState.isScrollInProgress}"
+            )
         }
 
         LazyColumn(
@@ -80,10 +85,15 @@ private fun Screen() {
                     SwipeBox(
                         state = swipeBoxState,
                         foreground = {
-                            ListItem(swipeBoxState)
+                            ListItem(
+                                enabled = !swipeBoxState.isDragging && !swipeBoxState.isOpen,
+                                swipeBoxState = swipeBoxState
+                            )
                         },
                         background = {
-                            ListItemActions()
+                            ListItemActions(
+                                enabled = !swipeBoxState.isDragging && swipeBoxState.isOpen
+                            )
                         }
                     )
                     Divider(color = Color(0xFFF4F4F4))
@@ -94,11 +104,12 @@ private fun Screen() {
 }
 
 @Composable
-private fun ListItem(swipeBoxState: SwipeBoxState) {
+private fun ListItem(enabled: Boolean, swipeBoxState: SwipeBoxState) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
+            .clickable(enabled = enabled, onClick = {})
             .padding(8.dp)
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -143,48 +154,46 @@ private fun StatusText(
     modifier: Modifier = Modifier,
     text: String
 ) {
-    var initialized by remember { mutableStateOf(false) }
-    var color by remember { mutableStateOf(Color.LightGray) }
-
-    LaunchedEffect(text) {
-        if (initialized) {
-            Animatable(Color.Red).animateTo(
-                targetValue = Color.LightGray,
-                tween(durationMillis = 200)
-            ) {
-                color = value
-            }
-        } else {
-            initialized = true
-        }
-    }
-
     Text(
         modifier = modifier,
         text = text,
-        style = TextStyle(fontSize = 11.sp, color = color)
+        style = TextStyle(fontSize = 11.sp, color = Color.LightGray)
     )
 }
 
 @Composable
-private fun ListItemActions() {
+private fun ListItemActions(modifier: Modifier = Modifier, enabled: Boolean) {
+    val alphaAnimation by animateFloatAsState(
+        targetValue = when {
+            enabled -> 1f
+            else -> 0.6f
+        },
+        tween(durationMillis = 400)
+    )
+
     Row(
-        modifier = Modifier.background(Color(0xFFEEEEEE)),
+        modifier = Modifier
+            .background(Color(0xFFEEEEEE))
+            .alpha(alphaAnimation)
+            .then(modifier),
         horizontalArrangement = Arrangement.spacedBy(1.dp)
     ) {
         SwipeBoxActionButton(
             icon = Icons.Rounded.Share,
             label = "Share",
+            enabled = enabled,
             onClick = {}
         )
         SwipeBoxActionButton(
             icon = Icons.Rounded.Favorite,
             label = "Favorite",
+            enabled = enabled,
             onClick = {}
         )
         SwipeBoxActionButton(
             icon = Icons.Rounded.Delete,
             label = "Delete",
+            enabled = enabled,
             onClick = {}
         )
     }
@@ -196,6 +205,7 @@ private fun SwipeBoxActionButton(
     label: String,
     width: Dp = 80.dp,
     color: Color = Color(0xFFF4F4F4),
+    enabled: Boolean,
     onClick: () -> Unit
 ) {
     Box(
@@ -203,7 +213,7 @@ private fun SwipeBoxActionButton(
             .fillMaxHeight()
             .width(width)
             .background(color)
-            .clickable(onClick = onClick, role = Role.Button)
+            .clickable(enabled = enabled, onClick = onClick, role = Role.Button)
     ) {
         Column(
             modifier = Modifier.align(Alignment.Center),

@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.IntOffset
+import kotlinx.coroutines.launch
 import kotlin.Unit
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -22,6 +24,8 @@ fun SwipeBox(
     background: @Composable BoxScope.() -> Unit,
     foreground: @Composable BoxScope.() -> Unit
 ) {
+    val scope = rememberCoroutineScope()
+
     Layout(
         modifier = modifier,
         content = {
@@ -37,10 +41,14 @@ fun SwipeBox(
                         enabled = state.enabled,
                         orientation = Orientation.Horizontal,
                         onDragStarted = {
-                            state.handleDragStarted()
+                            scope.launch {
+                                state.handleDragStarted()
+                            }
                         },
                         onDragStopped = {
-                            state.handleDragStopped()
+                            scope.launch {
+                                state.handleDragStopped()
+                            }
                         }
                     )
                     .background(Color.White),

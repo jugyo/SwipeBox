@@ -3,16 +3,18 @@ package org.jugyo.swipebox.sample
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.Animatable
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,11 +34,12 @@ class SwipeBoxDemoActivity : AppCompatActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Screen() {
     val scope = rememberCoroutineScope()
-    val swipeBoxState = rememberSwipeBoxState()
+    val swipeBoxState = rememberSwipeBoxState(
+        animationDurationMillis = 400
+    )
 
     val backgroundContentColor: Color by animateColorAsState(
         when {
@@ -69,6 +72,7 @@ private fun Screen() {
                 Text(text = "swipeBoxState.enabled: ${swipeBoxState.enabled}")
                 Text(text = "swipeBoxState.isDragging: ${swipeBoxState.isDragging}")
                 Text(text = "swipeBoxState.isOpen: ${swipeBoxState.isOpen}")
+                Text(text = "swipeBoxState.offset: ${swipeBoxState.offset}")
                 Text(text = "swipeBoxState.progress: ${swipeBoxState.progress}")
             }
 
@@ -76,7 +80,6 @@ private fun Screen() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    enabled = !swipeBoxState.isOpen,
                     onClick = {
                         scope.launch {
                             swipeBoxState.open()
@@ -85,7 +88,6 @@ private fun Screen() {
                     Text("Open")
                 }
                 Button(
-                    enabled = swipeBoxState.isOpen,
                     onClick = {
                         scope.launch {
                             swipeBoxState.close()
@@ -138,5 +140,7 @@ private fun BackgroundContent(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun Preview() {
-    Screen()
+    MaterialTheme {
+        Screen()
+    }
 }
