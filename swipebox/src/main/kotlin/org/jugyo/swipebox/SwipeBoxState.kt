@@ -92,9 +92,10 @@ private val SwipeThresholdRatio = 0.25f
 
 @Composable
 fun rememberSwipeBoxState(
+    key: Any? = null,
     animationDurationMillis: Int = DefaultAnimationDurationMillis,
     swipeThresholdRatio: Float = SwipeThresholdRatio
-) = remember {
+) = remember(key) {
     SwipeBoxState(
         animationDurationMillis = animationDurationMillis,
         swipeThresholdRatio = swipeThresholdRatio

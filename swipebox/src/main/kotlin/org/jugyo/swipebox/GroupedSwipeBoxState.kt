@@ -13,13 +13,12 @@ class GroupedSwipeBoxState<T> internal constructor(
     private var stateMap = mutableMapOf<T, SwipeBoxState>()
 
     @Composable
-    fun rememberSwipeBoxState(key: T): SwipeBoxState {
-        val swipeBoxState = remember(key) {
-            SwipeBoxState(
-                animationDurationMillis,
-                swipeThresholdRatio
-            )
-        }
+    fun stateFor(key: T): SwipeBoxState {
+        val swipeBoxState = rememberSwipeBoxState(
+            key = key,
+            animationDurationMillis = animationDurationMillis,
+            swipeThresholdRatio = swipeThresholdRatio,
+        )
 
         stateMap[key] = swipeBoxState
 

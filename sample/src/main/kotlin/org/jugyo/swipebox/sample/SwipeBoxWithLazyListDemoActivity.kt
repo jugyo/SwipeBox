@@ -78,7 +78,7 @@ private fun Screen() {
             state = lazyListState
         ) {
             items(12) { index ->
-                val swipeBoxState = swipeListState.rememberSwipeBoxState(index)
+                val swipeBoxState = swipeListState.stateFor(index)
 
                 Column {
                     SwipeBox(
